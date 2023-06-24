@@ -1,0 +1,5 @@
+test-string: "Hello, World!"
+
+# The location of the spawn point
+stomachs:
+  oral: 0, 0, 0

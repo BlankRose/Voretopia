@@ -1,7 +1,0 @@
-name: Voretopia
-version: "0.0.1"
-author: Rosie
-website: https://github.com/BlankRose/Voretopia
-
-api-version: "1.20"
-main: dev.voretopia.Voretopia

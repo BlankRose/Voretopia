@@ -1,0 +1,87 @@
+name: Voretopia
+version: "0.0.1"
+author: Rosie
+website: https://github.com/BlankRose/Voretopia
+api-version: "1.20"
+main: dev.blankrose.voretopia.Voretopia
+
+
+
+commands:
+  vore:
+    description: Base command for Voretopia
+    usage: "Usage: /<command> [sub-command] ..."
+    aliases: [ vo ]
+    permission: voretopia.command.vore
+    permission-message: You do not have permission to use this command.
+
+  vore-gui:
+    description: Opens a GUI to interact with
+    usage: "Usage: /<command>"
+    aliases: [ vogui ]
+    permission: voretopia.command.gui
+    permission-message: You do not have permission to use this command.
+
+  vore-list:
+    description: Display a list of players with their roles
+    usage: "Usage: /<command>"
+    aliases: [ volist ]
+    permission: voretopia.command.list
+    permission-message: You do not have permission to view the list.
+
+  vore-guide:
+    description: Grants a book which, upon clicked, opens the vore GUI
+    usage: "Usage: /<command>"
+    aliases: [ voguide ]
+    permission: voretopia.command.guide
+    permission-message: You do not have permission to obtain a new guide.
+
+  vore-reload:
+    description: Reloads the configuration files
+    usage: "Usage: /<command>"
+    aliases: [ voreload ]
+    permission: voretopia.command.reload
+    permission-message: You do not have permission to reload the plugin.
+
+
+
+permissions:
+  voretopia.interactions.*:
+    description: Wildcard permission for all Voretopia interactions
+    default: op
+
+  voretopia.commands.*:
+    description: Wildcard permission for all Voretopia commands
+    default: op
+    children:
+      voretopia.command.vore: true
+      voretopia.command.gui: true
+      voretopia.command.list: true
+      voretopia.command.guide: true
+
+  voretopia.command.vore:
+    description: Allows to use the basic command line
+    default: true
+
+  voretopia.command.gui:
+    description: Allows to open the basic GUI menu
+    default: true
+
+  voretopia.command.list:
+    description: Allows to view a list of players with their roles
+    default: true
+
+  voretopia.command.guide:
+    description: Allows users to obtain a book, which upon right click, opens the GUI
+    default: true
+
+  voretopia.command.reload:
+    description: Allows to reload the plugin
+    default: op
+
+  voretopia.*:
+    description: Wildcard permission for all Voretopia features
+    default: op
+    children:
+      voretopia.commands.*: true
+      voretopia.interactions.*: true

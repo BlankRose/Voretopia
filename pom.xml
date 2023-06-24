@@ -7,13 +7,13 @@
 
 	<name>Voretopia</name>
 	<version>0.0.1</version>
-	<groupId>dev.voretopia</groupId>
+	<groupId>dev.blankrose.voretopia</groupId>
 	<artifactId>voretopia</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 
 	<repositories>
@@ -25,12 +25,6 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
 		<!--This adds the Spigot API artifact to the build -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -41,6 +35,15 @@
 	</dependencies>
 
 	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/resources</directory>
+			</resource>
+		</resources>
+		<defaultGoal>package</defaultGoal>
+		<directory>build</directory>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
