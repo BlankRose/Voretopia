@@ -1,0 +1,39 @@
+# ############################################## #
+# #                                            # #
+# #            BASIC CONFIGURATION             # #
+# #                                            # #
+# ############################################## #
+
+# Toggles whether or not the NSFW variants of the stomachs are enabled
+#  - false: Only the default oral vore will be allowed
+#  - true: All vore types will be allowed (like anal vore, breast vore, etc.)
+nsfw-enabled: false
+
+# Toggles whether or not the players are required to give consent
+# before being vored (will prompt a message to the target player)
+#  - false: Consent is not required
+#  - true: Consent is required
+consent-required: true
+
+# Allows players to set to free roles, where they can be interacted or
+# interact without consent (bypass the consent-required setting)
+#  - false: Free roles are not allowed
+#  - true: Free roles are allowed
+free-roles: true
+
+# ############################################## #
+# #                                            # #
+# #           STOMACHS CONFIGURATION           # #
+# #                                            # #
+# ############################################## #
+
+# List of all stomachs that are enabled for the server
+# When nsfw-enabled is set to false, this list will be ignored for oral vore
+#  - list: List of all enabled stomachs
+enabled-stomachs: [ "oral", "anal", "breast", "cock", "unbirth" ]
+
+# Defines which gamemode players are set to once vored
+# When others plugin handles gamemode changement, it is better to set it to none
+#  - none (or invalid): Does not change gamemode
+#  - survival | creative | adventure: Change to the given gamemode
+stomach-gamemode: survival

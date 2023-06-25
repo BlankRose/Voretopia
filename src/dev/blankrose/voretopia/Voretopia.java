@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 12:05 AM         */
+/*       //\   /         Last Updated: Sunday, June 25, 2023 7:05 PM          */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.blankrose.voretopia.commands.GenericCompletion;
 import dev.blankrose.voretopia.core.CommandsManager;
 import dev.blankrose.voretopia.core.ConfigurationManager;
 import dev.blankrose.voretopia.core.CoreData;
@@ -32,11 +33,16 @@ public class Voretopia extends JavaPlugin
 	@Override
 	public void onLoad()
 	{
-		CoreData.define(this);
-
 		logs = getLogger();
-		ConfigurationManager.getInstance()
-			.addConfig(CoreData.getBaseConfigID(), CoreData.getBaseConfigFile())
+
+		// Initialize generic classes
+		CoreData.define(this);
+		GenericCompletion.getInstance().init(this);
+		
+		// Load configs
+		ConfigurationManager.getInstance().init(this)
+			.addConfig("core", "configs/config.yml", "config.yml")
+			.addConfig("players", "configs/players.yml", "players.yml")
 			.loadConfigs();
 
 		logs.info("Voretopia has been loaded!");
@@ -45,6 +51,7 @@ public class Voretopia extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		// Register commands and events
 		CommandsManager.getInstance().registerCommands(this);
 		EventsManager.getInstance().registerEvents(this);
 

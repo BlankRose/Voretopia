@@ -1,49 +1,42 @@
 /* ************************************************************************** */
 /*          .-.                                                               */
 /*    __   /   \   __                                                         */
-/*   (  `'.\   /.'`  )   core - CoreData.java                                 */
+/*   (  `'.\   /.'`  )   core - PlayersManager.java                           */
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 7:49 PM          */
+/*       //\   /         Last Updated: Sunday, June 25, 2023 11:59 AM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
 package dev.blankrose.voretopia.core;
 
-import org.bukkit.plugin.Plugin;
-
 /**
- * << Non-Instantiable >>
- * CoreValues
+ * << Singleton >>
+ * PlayersManager
  * <p>
- * Class storing all of the plugin's major constants,
- * used throughout the plugin's codebase
+ * Manages all players on the server, along with all their relations
+ * to other players and entities.
  * */
-public final class CoreData {
+public class PlayersManager {
 
 	// Attributes
 	//////////////////////////////
 
-	private static Plugin core = null;
-
 	// Constructors
 	//////////////////////////////
 
-	private CoreData() {
-		throw new UnsupportedOperationException();
+	private static PlayersManager instance = null;
+	private PlayersManager() {}
+
+	public static PlayersManager getInstance() {
+		if (instance == null) {
+			instance = new PlayersManager();
+		}
+		return instance;
 	}
 
-	public static void define(Plugin self) {
-		if (core != null)
-			throw new UnsupportedOperationException("CoreData has been already defined!");
-		core = self;
-	}
-
-	// Getters & Setters
+	// Methods
 	//////////////////////////////
-
-	// Any access to base plugin should be done through this package
-	static Plugin getCore() { return core; }
 
 }

@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Saturday, June 24, 2023 10:40 PM       */
+/*       //\   /         Last Updated: Sunday, June 25, 2023 12:22 PM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * << Singleton >>
@@ -48,19 +48,18 @@ public class ConfigurationManager {
 	// Attributes
 	//////////////////////////////
 
-	private static final Logger LOGGER = CoreData.getLogger();
 	private Map<String, ConfigurationEntry> configs;
+
+	private JavaPlugin core;
 	private File data_folder;
-	private Plugin core;
+	private Logger logs;
 
 	// Constructors
 	//////////////////////////////
 
 	private static ConfigurationManager instance = null;
 	private ConfigurationManager() {
-		core = CoreData.getCore();
 		configs = new TreeMap<String, ConfigurationEntry>();
-		data_folder = CoreData.getDataFolder();
 	}
 
 	public static ConfigurationManager getInstance() {
@@ -121,6 +120,16 @@ public class ConfigurationManager {
 	// Methods
 	//////////////////////////////
 
+	public ConfigurationManager init(JavaPlugin self) {
+		if (core != null)
+			throw new IllegalStateException("ConfigurationManager was already initialized!");
+
+		core = self;
+		data_folder = self.getDataFolder();
+		logs = self.getLogger();
+		return this;
+	}
+
 	public ConfigurationManager addConfig(String id, String target) {
 		return addConfig(id, target, target);
 	}
@@ -138,6 +147,9 @@ public class ConfigurationManager {
 	}
 
 	public ConfigurationManager loadConfigs() {
+		if (core == null)
+			throw new IllegalStateException("ConfigurationManager was not initialized!");
+
 		int fails = 0;
 		for (ConfigurationEntry entry : configs.values()) {
 			entry.config = loadTarget(entry.resource, entry.target);
@@ -145,21 +157,24 @@ public class ConfigurationManager {
 				fails++;
 		}
 
-		LOGGER.info("Successfully loaded all configurations!");
+		logs.info("Successfully loaded all configurations!");
 		if (fails > 0)
-			LOGGER.warning("Failed to load " + fails + " configuration(s)!");
+			logs.warning("Failed to load " + fails + " configuration(s)!");
 		return this;
 	}
 
 	public ConfigurationManager saveConfigs() {
+		if (core == null)
+			throw new IllegalStateException("ConfigurationManager was not initialized!");
+
 		int fails = 0;
 		for (ConfigurationEntry entry : configs.values())
 			if (!saveTarget(entry.resource, entry.target, entry.config))
 				fails++;
 
-		LOGGER.info("Successfully saved all configurations!");
+		logs.info("Successfully saved all configurations!");
 		if (fails > 0)
-			LOGGER.warning("Failed to save " + fails + " configuration(s)!");
+			logs.warning("Failed to save " + fails + " configuration(s)!");
 		return this;
 	}
 
@@ -167,6 +182,8 @@ public class ConfigurationManager {
 	//////////////////////////////
 
 	public Configuration getDefaultConfig(String id) {
+		if (id == null)
+			throw new NullPointerException("ID cannot be null!");
 		return configs.get(id).config.getDefaults();
 	}
 
@@ -177,6 +194,8 @@ public class ConfigurationManager {
 	}
 
 	public Configuration getConfig(String id) {
+		if (id == null)
+			throw new NullPointerException("ID cannot be null!");
 		return configs.get(id).config;
 	}
 

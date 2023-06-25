@@ -5,7 +5,11 @@ website: https://github.com/BlankRose/Voretopia
 api-version: "1.20"
 main: dev.blankrose.voretopia.Voretopia
 
-
+# ############################################## #
+#                                                #
+#               AVAILABLE COMMANDS               #
+#                                                #
+# ############################################## #
 
 commands:
   vore:
@@ -43,7 +47,11 @@ commands:
     permission: voretopia.command.reload
     permission-message: You do not have permission to reload the plugin.
 
-
+# ############################################## #
+#                                                #
+#               PERMISSIONS NODES                #
+#                                                #
+# ############################################## #
 
 permissions:
   voretopia.interactions.*:
@@ -58,13 +66,35 @@ permissions:
       voretopia.command.gui: true
       voretopia.command.list: true
       voretopia.command.guide: true
+      voretopia.command.reload: true
+      voretopia.command.vore.*: true
 
   voretopia.command.vore:
     description: Allows to use the basic command line
     default: true
 
   voretopia.command.gui:
-    description: Allows to open the basic GUI menu
+    description: Allows to open the basic GUI menu instead of using the command line
+    default: true
+
+  voretopia.command.vore.*:
+    description: Wildcard permission for all Voretopia command line features
+    default: op
+    children:
+      voretopia.command.vore.set: true
+      voretopia.command.vore.setstomach: true
+      voretopia.command.vore.stop: true
+
+  voretopia.command.vore.set:
+    description: Allows to set the role of a player
+    default: true
+
+  voretopia.command.vore.setstomach:
+    description: Allows to set the stomach of a player
+    default: true
+
+  voretopia.command.vore.stop:
+    description: Allows to stop a player from being vored
     default: true
 
   voretopia.command.list:
