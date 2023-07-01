@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 7:49 PM          */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 7:25 PM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -13,8 +13,6 @@ package dev.blankrose.voretopia.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.blankrose.voretopia.core.ConfigurationManager;
 
@@ -30,7 +28,6 @@ public class GenericCompletion {
 	//////////////////////////////
 
 	private ConfigurationManager config;
-	private JavaPlugin core;
 
 	// Constructors
 	//////////////////////////////
@@ -49,12 +46,6 @@ public class GenericCompletion {
 	// Methods
 	//////////////////////////////
 
-	public void init(JavaPlugin core) {
-		if (this.core != null)
-			throw new IllegalStateException("Generic Completion has already been initialized!");
-		this.core = core;
-	}
-
 	public List<String> getEmpty() {
 		return new ArrayList<String>();
 	}
@@ -71,6 +62,11 @@ public class GenericCompletion {
 				add("fswitch");
 				add("fprey");
 			}
+		}};
+	}
+
+	public List<String> getTypes() {
+		return new ArrayList<String>() {{
 		}};
 	}
 

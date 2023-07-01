@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 7:05 PM          */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 7:50 PM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -15,17 +15,16 @@ import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.blankrose.voretopia.commands.GenericCompletion;
 import dev.blankrose.voretopia.core.CommandsManager;
 import dev.blankrose.voretopia.core.ConfigurationManager;
-import dev.blankrose.voretopia.core.CoreData;
+import dev.blankrose.voretopia.core.EntityWatcher;
 import dev.blankrose.voretopia.core.EventsManager;
 
 /**
  * Voretopia plugin entrypoint
  * <p>
  * By Rosie
- */
+ * */
 public class Voretopia extends JavaPlugin
 {
 	private Logger logs;
@@ -35,16 +34,14 @@ public class Voretopia extends JavaPlugin
 	{
 		logs = getLogger();
 
-		// Initialize generic classes
-		CoreData.define(this);
-		GenericCompletion.getInstance().init(this);
-		
-		// Load configs
+		// Initialize everything
+		EntityWatcher.init(this);
 		ConfigurationManager.getInstance().init(this)
 			.addConfig("core", "configs/config.yml", "config.yml")
 			.addConfig("players", "configs/players.yml", "players.yml")
 			.loadConfigs();
 
+		// Print success message
 		logs.info("Voretopia has been loaded!");
 	}
 
@@ -55,12 +52,14 @@ public class Voretopia extends JavaPlugin
 		CommandsManager.getInstance().registerCommands(this);
 		EventsManager.getInstance().registerEvents(this);
 
+		// Print success message
 		logs.info("Voretopia is now enabled!");
 	}
 
 	@Override
 	public void onDisable()
 	{
+		// Print success message
 		logs.info("Voretopia has been disabled!");
 	}
 }

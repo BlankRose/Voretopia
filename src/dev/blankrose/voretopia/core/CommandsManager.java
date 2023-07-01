@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 5:22 PM          */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 9:08 PM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.blankrose.voretopia.commands.CancelCompletion;
+import dev.blankrose.voretopia.commands.ConfigCheckerCommand;
+import dev.blankrose.voretopia.commands.ListCommand;
 import dev.blankrose.voretopia.commands.ReloadCommand;
 import dev.blankrose.voretopia.commands.VoreCommand;
+import dev.blankrose.voretopia.commands.VoreCompletion;
 
 /**
  * << Singleton >>
@@ -64,10 +67,17 @@ public class CommandsManager {
 		this.core = core;
 
 		// Register commands
-		core.getCommand("vore").setExecutor(new VoreCommand());
-
 		registerSingle("vore-reload",
 			new ReloadCommand(),
+			new CancelCompletion());
+		registerSingle("vore",
+			new VoreCommand(),
+			new VoreCompletion());
+		registerSingle("vore-list",
+			new ListCommand(),
+			new CancelCompletion());
+		registerSingle("config-checker",
+			new ConfigCheckerCommand(),
 			new CancelCompletion());
 
 		core.getLogger().info("All commands has been successfully registered!");

@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Saturday, June 24, 2023 10:40 PM       */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 11:27 PM        */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import dev.blankrose.voretopia.core.ConfigurationManager;
+import dev.blankrose.voretopia.utils.PrefixBuilder;
 
 /**
  * ReloadCommand
@@ -33,8 +34,15 @@ public class ReloadCommand implements CommandExecutor {
 		if (args.length != 0)
 			return false;
 
+		// Reloads all configs
 		ConfigurationManager.getInstance().loadConfigs();
 		sender.sendMessage("All configs has been reloaded!");
+
+		// Updates prefix according to the new configs
+		sender.getServer().getOnlinePlayers().forEach(player -> {
+			player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
+		});
+
 		return true;
 	}
 

@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 6:56 PM          */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 7:10 PM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ import org.bukkit.command.TabCompleter;
  * */
 public class VoreCompletion implements TabCompleter {
 
+	// Attributes
+	//////////////////////////////
+
+	private static GenericCompletion GENERIC = GenericCompletion.getInstance();
+
 	// Methods
 	//////////////////////////////
 
@@ -33,6 +38,7 @@ public class VoreCompletion implements TabCompleter {
 		// Subcommands selector
 		if (args.length <= 1)
 			return new ArrayList<String>() {{
+				add("help");
 				if (sender.hasPermission("voretopia.command.vore.set"))
 					add("set");
 				if (sender.hasPermission("voretopia.command.vore.setstomach"))
@@ -42,20 +48,18 @@ public class VoreCompletion implements TabCompleter {
 			}};
 
 		// Set subcommand
-		if (args[0].equalsIgnoreCase("set")
-			&& args.length == 2) {
-				return new ArrayList<String>() {{
-					add("pred");
-					add("switch");
-					add("prey");
-				}};
+		if (args[0].equalsIgnoreCase("set") && args.length == 2
+			&& sender.hasPermission("voretopia.command.vore.set")) {
+			return GENERIC.getRoles();
 		}
 
 		// Setstomach subcommand
-		if (args[0].equalsIgnoreCase("setstomach")) {
-
+		if (args[0].equalsIgnoreCase("setstomach")
+			&& sender.hasPermission("voretopia.command.vore.setstomach")) {
+			// TODO: Add stomach types
 		}
 
+		// Returns empty list when none exists for given context
 		return new ArrayList<String>();
 	}
 

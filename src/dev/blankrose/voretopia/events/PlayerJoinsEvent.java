@@ -1,41 +1,41 @@
 /* ************************************************************************** */
 /*          .-.                                                               */
 /*    __   /   \   __                                                         */
-/*   (  `'.\   /.'`  )   events - PlayerEvent.java                            */
+/*   (  `'.\   /.'`  )   events - PlayerJoinsEvent.java                       */
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 12:09 AM         */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 11:42 PM        */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
 package dev.blankrose.voretopia.events;
 
-import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import dev.blankrose.voretopia.utils.PrefixBuilder;
 
 /**
- * PlayerInteractEvent
+ * PlayerJoinsEvent
  * <p>
- * Event class for the PlayerInteractEvent event.
- * Triggered when a player interacts with an entity.
+ * Event class for the PlayerJoinsEvent event.
+ * Triggered when a player joins the server.
  * */
-public class PlayerEvent implements Listener {
+public class PlayerJoinsEvent implements Listener {
 
 	// Methods
 	//////////////////////////////
 
 	@EventHandler
-	public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
-		if (event.getPlayer().isSneaking()
-			&& event.getRightClicked().getType() == EntityType.PLAYER) {
+	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		// Retrieve player information
+		Player player = event.getPlayer();
 
-			// TODO: Implement event
-			event.getRightClicked().teleport(new Location(event.getPlayer().getWorld(), 0, 100, 0));
-		}
+		// Update player's display name
+		player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
 	}
 
 }

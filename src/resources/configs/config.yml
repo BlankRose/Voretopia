@@ -30,10 +30,31 @@ free-roles: true
 # List of all stomachs that are enabled for the server
 # When nsfw-enabled is set to false, this list will be ignored for oral vore
 #  - list: List of all enabled stomachs
-enabled-stomachs: [ "oral", "anal", "breast", "cock", "unbirth" ]
+enabled-stomachs: [ "oral" ]
 
 # Defines which gamemode players are set to once vored
 # When others plugin handles gamemode changement, it is better to set it to none
 #  - none (or invalid): Does not change gamemode
 #  - survival | creative | adventure: Change to the given gamemode
 stomach-gamemode: survival
+
+# ############################################## #
+# #                                            # #
+# #             ADDITIONAL FEATURES            # #
+# #                                            # #
+# ############################################## #
+
+# Toggles the roles prefix, that is shown on players' list name
+#  - false: The prefix will not be shown
+#  - true: The prefix will be shown
+roles-prefix: true
+
+# Customize the prefix that is shown on players' list name depending
+# on the role they currently hold (§ is used for color codes)
+prefix-bystander: "§f[§7§lBystander§f]§r"
+prefix-pred: "§f[§c§lPred§f]§r"
+prefix-prey: "§f[§a§lPrey§f]§r"
+prefix-switch: "§f[§6§lSwitch§f]§r"
+prefix-freepred: "§f[§c§lFreePred§f]§r"
+prefix-freeprey: "§f[§a§lFreePrey§f]§r"
+prefix-freeswitch: "§f[§6§lFreeSwitch§f]§r"

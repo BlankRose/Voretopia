@@ -5,7 +5,7 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 12:02 AM         */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 9:47 PM         */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@ package dev.blankrose.voretopia.core;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.blankrose.voretopia.events.PlayerEvent;
+import dev.blankrose.voretopia.events.PlayerInteractEvent;
+import dev.blankrose.voretopia.events.PlayerJoinsEvent;
 
 /**
  * << Singleton >>
@@ -55,7 +56,9 @@ public class EventsManager {
 		this.manager = core.getServer().getPluginManager();
 
 		// Register events
-		manager.registerEvents(new PlayerEvent(), core);
+		manager.registerEvents(new PlayerInteractEvent(), core);
+		manager.registerEvents(new PlayerJoinsEvent(), core);
+
 		core.getLogger().info("All events has been successfully registered!");
 	}
 

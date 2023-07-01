@@ -5,14 +5,18 @@
 /*    '-._.(;;;)._.-'                                                         */
 /*    .-'  ,`"`,  '-.                                                         */
 /*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Sunday, June 25, 2023 12:22 PM         */
+/*       //\   /         Last Updated: Saturday, July 1, 2023 11:15 PM        */
 /*      ||  '-'                                                               */
 /* ************************************************************************** */
 
 package dev.blankrose.voretopia.core;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -82,7 +86,22 @@ public class ConfigurationManager {
 		// Save default config file (or create if missing)
 		File file = new File(data_folder, target);
 		if (!file.exists()) {
-			core.saveResource(resource, false);
+			try {
+				InputStream src = core.getResource(resource);
+				OutputStream dst = new FileOutputStream(file);
+
+				byte[] buf = new byte[2048];
+				int len = 0;
+				while ((len = src.read(buf)) > 0)
+					dst.write(buf, 0, len);
+
+				src.close();
+				dst.close();
+			} catch (IOException error) {
+				core.getLogger().severe("Failed to retrieve default configuration file for " + target + "!");
+				error.printStackTrace();
+				return false;
+			}
 			loadTarget(resource, target); // Ensures config copied over WITH comments
 		} else {
 			try {
@@ -103,7 +122,8 @@ public class ConfigurationManager {
 		// Loads configuration file or creates a create if missing
 		File file = new File(data_folder, target);
 		if (!data_folder.exists() || !file.exists())
-			saveTarget(resource, target, null);
+			if (!saveTarget(resource, target, null))
+				return null;
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
 		// Appends defaults and save (in case of missing)
@@ -184,36 +204,62 @@ public class ConfigurationManager {
 	public Configuration getDefaultConfig(String id) {
 		if (id == null)
 			throw new NullPointerException("ID cannot be null!");
+		if (!configs.containsKey(id))
+			return null;
 		return configs.get(id).config.getDefaults();
 	}
 
 	public Object getDefaultConfig(String id, String path) {
 		if (id == null || path == null)
 			throw new NullPointerException("Path cannot be null!");
+		if (!configs.containsKey(id))
+			return null;
 		return configs.get(id).config.getDefaults().get(path);
 	}
 
 	public Configuration getConfig(String id) {
 		if (id == null)
 			throw new NullPointerException("ID cannot be null!");
+		if (!configs.containsKey(id))
+			return null;
 		return configs.get(id).config;
 	}
 
 	public Object getConfig(String id, String path) {
 		if (id == null || path == null)
 			throw new NullPointerException("Path cannot be null!");
+		if (!configs.containsKey(id))
+			return null;
 		return configs.get(id).config.get(path);
+	}
+
+	// Safe version of getConfig which checks for the given type
+	// and returns the default value if the value is not of the given type
+	public <T> T getConfig(String id, String path, Class<T> type) {
+		if (id == null || path == null || type == null)
+			throw new NullPointerException("Path and type cannot be null!");
+		if (!configs.containsKey(id))
+			return null;
+
+		Object value = configs.get(id).config.get(path);
+		if (value == null || !type.isInstance(value))
+			return type.cast(getDefaultConfig(id, path));
+		return type.cast(value);
 	}
 
 	public void setConfig(String id, Configuration config) {
 		if (id == null || config == null)
 			throw new NullPointerException("Configuration cannot be null!");
+		if (!configs.containsKey(id))
+			throw new NullPointerException("Configuration does not exist!");
 		configs.get(id).config = (YamlConfiguration) config;
 	}
 
 	public void setConfig(String id, String path, Object value) {
 		if (id == null || path == null || value == null)
 			throw new NullPointerException("Path and value cannot be null!");
+		if (!configs.containsKey(id))
+			throw new NullPointerException("Configuration does not exist!");
 		configs.get(id).config.set(path, value);
 	}
 

@@ -12,6 +12,12 @@ main: dev.blankrose.voretopia.Voretopia
 # ############################################## #
 
 commands:
+  config-checker:
+    description: Manually checks individual configuration values
+    usage: "Usage: /<command> <category> <key>"
+    permission: voretopia.command.configchecker
+    permission-message: You do not have permission to use this command.
+
   vore:
     description: Base command for Voretopia
     usage: "Usage: /<command> [sub-command] ..."
@@ -62,12 +68,17 @@ permissions:
     description: Wildcard permission for all Voretopia commands
     default: op
     children:
+      voretopia.command.configchecker: true
       voretopia.command.vore: true
       voretopia.command.gui: true
       voretopia.command.list: true
       voretopia.command.guide: true
       voretopia.command.reload: true
       voretopia.command.vore.*: true
+
+  voretopia.command.configchecker:
+    description: Allows to manually check individual configuration values
+    default: op
 
   voretopia.command.vore:
     description: Allows to use the basic command line
