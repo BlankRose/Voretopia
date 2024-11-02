@@ -29,9 +29,8 @@ public class EventsManager {
 	//////////////////////////////
 
 	private JavaPlugin core;
-	private PluginManager manager;
 
-	// Constructors
+    // Constructors
 	//////////////////////////////
 
 	private static EventsManager instance;
@@ -53,7 +52,7 @@ public class EventsManager {
 		if (this.core != null)
 			throw new IllegalStateException("Events has already been initialized!");
 		this.core = core;
-		this.manager = core.getServer().getPluginManager();
+        PluginManager manager = core.getServer().getPluginManager();
 
 		// Register events
 		manager.registerEvents(new PlayerInteractEvent(), core);

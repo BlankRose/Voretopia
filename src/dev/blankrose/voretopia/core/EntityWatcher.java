@@ -13,6 +13,7 @@ package dev.blankrose.voretopia.core;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +31,8 @@ public class EntityWatcher {
 	//////////////////////////////
 
 	private static JavaPlugin core;
-	private PersistentDataContainer meta;
+	private final PersistentDataContainer meta;
+	private final Player player;
 
 	// Constructors
 	//////////////////////////////
@@ -39,6 +41,10 @@ public class EntityWatcher {
 		if (core == null)
 			throw new IllegalStateException("Watcher has not been initialized!");
 		this.meta = entity.getPersistentDataContainer();
+		if (entity instanceof Player)
+			this.player = (Player) entity;
+		else
+			this.player = null;
 	}
 
 	// Methods
@@ -54,9 +60,9 @@ public class EntityWatcher {
 		return new NamespacedKey(core, key);
 	}
 
-	public <T, V> V retrieve(String key, PersistentDataType<T, V> type, V def) {
+	public <T, V> V retrieve(String key, PersistentDataType<T, V> type, V default_value) {
 		if (!meta.has(getNamespacedKey(key), type))
-			meta.set(getNamespacedKey(key), type, def);
+			meta.set(getNamespacedKey(key), type, default_value);
 		return meta.get(getNamespacedKey(key), type);
 	}
 
@@ -84,24 +90,30 @@ public class EntityWatcher {
 		return retrieve("preys", PersistentDataType.LONG_ARRAY, new long[0]);			
 	}
 
-	public void setPred(boolean value) {
-		store("isPred", PersistentDataType.BOOLEAN, value);
+	/// Defines if it's a predator, capable of devouring preys
+	public void setPred(boolean enabled) {
+		if (enabled && player != null)
+			AdvancementManager.getInstance().grant(player, "pred");
+		store("isPred", PersistentDataType.BOOLEAN, enabled);
 	}
 
-	public void setPrey(boolean value) {
-		store("isPrey", PersistentDataType.BOOLEAN, value);
+	/// Defines if it's a prey, capable of being devoured by predators
+	public void setPrey(boolean enabled) {
+		if (enabled && player != null)
+			AdvancementManager.getInstance().grant(player, "prey");
+		store("isPrey", PersistentDataType.BOOLEAN, enabled);
 	}
 
-	public void setFree(boolean value) {
-		store("isFree", PersistentDataType.BOOLEAN, value);
+	public void setFree(boolean enabled) {
+		store("isFree", PersistentDataType.BOOLEAN, enabled);
 	}
 
-	public void setPred(long value) {
-		store("pred", PersistentDataType.LONG, value);
+	public void setPred(long uuid) {
+		store("pred", PersistentDataType.LONG, uuid);
 	}
 
-	public void setPreys(long[] value) {
-		store("preys", PersistentDataType.LONG_ARRAY, value);
+	public void setPreys(long[] uuids) {
+		store("preys", PersistentDataType.LONG_ARRAY, uuids);
 	}
 
 }

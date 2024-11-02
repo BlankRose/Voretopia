@@ -13,12 +13,8 @@ package dev.blankrose.voretopia;
 
 import java.util.logging.Logger;
 
+import dev.blankrose.voretopia.core.*;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import dev.blankrose.voretopia.core.CommandsManager;
-import dev.blankrose.voretopia.core.ConfigurationManager;
-import dev.blankrose.voretopia.core.EntityWatcher;
-import dev.blankrose.voretopia.core.EventsManager;
 
 /**
  * Voretopia plugin entrypoint
@@ -51,6 +47,7 @@ public class Voretopia extends JavaPlugin
 		// Register commands and events
 		CommandsManager.getInstance().registerCommands(this);
 		EventsManager.getInstance().registerEvents(this);
+		AdvancementManager.getInstance().registerAdvancements(this);
 
 		// Print success message
 		logs.info("Voretopia is now enabled!");

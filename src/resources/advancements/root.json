@@ -1,0 +1,20 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:axolotl_bucket"
+        },
+        "title": "Vore",
+        "description": "To eat or to be eaten",
+        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "trigger": {
+            "trigger": "minecraft:tick"
+        }
+    },
+    "sends_telemetry_event": false
+}

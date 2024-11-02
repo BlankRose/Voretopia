@@ -11,7 +11,9 @@
 
 package dev.blankrose.voretopia.events;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -29,11 +31,13 @@ public class PlayerInteractEvent implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEntityEvent event) {
-		if (event.getPlayer().isSneaking()
-			&& event.getRightClicked().getType() == EntityType.PLAYER) {
+		Player caller = event.getPlayer();
+		Entity target = event.getRightClicked();
+		if (caller.isSneaking()
+			&& target.getType() == EntityType.PLAYER) {
 
 			// TODO: Implement event
-			event.getRightClicked().teleport(event.getPlayer().getLocation());
+			target.teleport(caller.getLocation());
 		}
 	}
 
