@@ -1,0 +1,18 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:axolotl_bucket"
+        },
+        "title": "Vore",
+        "description": "To eat or to be eaten",
+        "background": "minecraft:textures/block/nether_wart_block.png",
+        "show_toast": false,
+        "announce_to_chat": false
+    },
+    "criteria": {
+        "trigger": {
+            "trigger": "minecraft:tick"
+        }
+    },
+    "sends_telemetry_event": false
+}

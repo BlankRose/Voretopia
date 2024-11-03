@@ -14,6 +14,7 @@ package dev.blankrose.voretopia.core;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.blankrose.voretopia.events.PlayerQuitsEvent;
 import dev.blankrose.voretopia.events.PlayerInteractEvent;
 import dev.blankrose.voretopia.events.PlayerJoinsEvent;
 
@@ -57,6 +58,7 @@ public class EventsManager {
 		// Register events
 		manager.registerEvents(new PlayerInteractEvent(), core);
 		manager.registerEvents(new PlayerJoinsEvent(), core);
+		manager.registerEvents(new PlayerQuitsEvent(), core);
 
 		core.getLogger().info("All events has been successfully registered!");
 	}

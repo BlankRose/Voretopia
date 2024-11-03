@@ -1,19 +1,19 @@
 {
     "display": {
         "icon": {
-            "id": "minecraft:axolotl_bucket"
+            "id": "minecraft:cookie"
         },
-        "title": "Vore",
-        "description": "To eat or to be eaten",
-        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "title": "Tasty Path",
+        "description": "Become a prey",
         "frame": "task",
         "show_toast": true,
         "announce_to_chat": true,
         "hidden": false
     },
+    "parent": "voretopia:root",
     "criteria": {
         "trigger": {
-            "trigger": "minecraft:tick"
+            "trigger": "minecraft:impossible"
         }
     },
     "sends_telemetry_event": false

@@ -5,10 +5,7 @@
         },
         "title": "Starving Path",
         "description": "Become a predator",
-        "frame": "task",
-        "show_toast": true,
-        "announce_to_chat": true,
-        "hidden": false
+        "frame": "task"
     },
     "parent": "voretopia:root",
     "criteria": {

@@ -1,41 +1,33 @@
-/* ************************************************************************** */
-/*          .-.                                                               */
-/*    __   /   \   __                                                         */
-/*   (  `'.\   /.'`  )   events - PlayerJoinsEvent.java                       */
-/*    '-._.(;;;)._.-'                                                         */
-/*    .-'  ,`"`,  '-.                                                         */
-/*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Saturday, July 1, 2023 11:42 PM        */
-/*      ||  '-'                                                               */
-/* ************************************************************************** */
-
 package dev.blankrose.voretopia.events;
 
+import dev.blankrose.voretopia.core.EntityWatcher;
+import dev.blankrose.voretopia.utils.PrefixBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import dev.blankrose.voretopia.utils.PrefixBuilder;
-
-/**
- * PlayerJoinsEvent
- * <p>
- * Event class for the PlayerJoinsEvent event.
- * Triggered when a player joins the server.
- * */
+/// PlayerJoinsEvent
+///
+/// Triggered when a player joins the server.
+/// Mostly used to make the player start from clean data.
 public class PlayerJoinsEvent implements Listener {
 
-	// Methods
-	//////////////////////////////
+    // Methods
+    //////////////////////////////
 
-	@EventHandler
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		// Retrieve player information
-		Player player = event.getPlayer();
+    @EventHandler
+    public void onPlayerJoinEvent(PlayerJoinEvent event) {
+        // Sets player's pred/prey tag
+        Player player = event.getPlayer();
+        String displayName = PrefixBuilder.getEntityPrefix(player);
+        player.setPlayerListName(displayName);
+        player.setDisplayName(displayName);
 
-		// Update player's display name
-		player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
-	}
+        // Clears current user data
+        EntityWatcher watcher = new EntityWatcher(player);
+        watcher.setPred(null);
+        watcher.setPreys(null);
+    }
 
 }
