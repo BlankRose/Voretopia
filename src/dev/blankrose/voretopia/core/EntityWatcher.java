@@ -7,6 +7,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -15,40 +16,15 @@ import java.util.*;
 /// Manages custom attributes for a given entity,
 /// along with all their relations to any other entities.
 public class EntityWatcher {
-
-    // Attributes
-    //////////////////////////////
-
-    private static JavaPlugin core;
     private final PersistentDataContainer meta;
     private final Player player;
 
-    // Constructors
-    //////////////////////////////
-
     public EntityWatcher(Entity entity) {
-        if (core == null)
-            throw new IllegalStateException("Watcher has not been initialized!");
         this.meta = entity.getPersistentDataContainer();
         if (entity instanceof Player)
             this.player = (Player) entity;
         else
             this.player = null;
-    }
-
-    // Methods
-    //////////////////////////////
-
-    public static void init(JavaPlugin core) {
-        if (EntityWatcher.core != null)
-            throw new IllegalStateException("Watcher has already been initialized!");
-        EntityWatcher.core = core;
-    }
-
-    ///
-    ///
-    private NamespacedKey getNamespacedKey(String key) {
-        return new NamespacedKey(core, key);
     }
 
     /// Retrieves the currently stored data behind the given key for this entity.
@@ -62,11 +38,17 @@ public class EntityWatcher {
     ///                         `null` can be passed to indicate no default value
     ///
     /// @return                 Data if any was found, otherwise `null`
+    @Nonnull
+    private <T, V> V retrieve(String key, PersistentDataType<T, V> type, @Nonnull V default_value) {
+        final NamespacedKey namespaced_key = Provider.getKey(key);
+        if (!meta.has(namespaced_key, type))
+            return default_value;
+        return Objects.requireNonNull(meta.get(namespaced_key, type));
+    }
+
     @Nullable
-    private <T, V> V retrieve(String key, PersistentDataType<T, V> type, @Nullable V default_value) {
-        final NamespacedKey namespaced_key = getNamespacedKey(key);
-        if (default_value != null && !meta.has(namespaced_key, type))
-            meta.set(namespaced_key, type, default_value);
+    private <T, V> V retrieve(String key, PersistentDataType<T, V> type) {
+        final NamespacedKey namespaced_key = Provider.getKey(key);
         return meta.get(namespaced_key, type);
     }
 
@@ -82,14 +64,14 @@ public class EntityWatcher {
         if (value == null)
             remove(key);
         else
-            meta.set(getNamespacedKey(key), type, value);
+            meta.set(Provider.getKey(key), type, value);
     }
 
     /// Deletes the stored data stored at the given key.
     ///
     /// @param key              Target key for the stored data
     private void remove(String key) {
-        meta.remove(getNamespacedKey(key));
+        meta.remove(Provider.getKey(key));
     }
 
     public boolean isPred() {
@@ -109,7 +91,7 @@ public class EntityWatcher {
     /// @return             Predator's UUID, or `null` if wasn't consumed
     @Nullable
     public UUID getPred() {
-        String stored = retrieve("pred", PersistentDataType.STRING, null);
+        String stored = retrieve("pred", PersistentDataType.STRING);
         if (stored != null)
             return UUID.fromString(stored);
         return null;
@@ -119,7 +101,7 @@ public class EntityWatcher {
     ///
     /// @return             Array of UUIDs corresponding to the consumed entities
     public UUID[] getPreys() {
-        String stored = retrieve("preys", PersistentDataType.STRING, null);
+        String stored = retrieve("preys", PersistentDataType.STRING);
         if (stored != null)
             return Arrays.stream(stored.split(":"))
                     .map(UUID::fromString)
@@ -133,7 +115,7 @@ public class EntityWatcher {
     /// @param enabled      `true` is entity is a predator, otherwise `false`
     public void setPred(boolean enabled) {
         if (enabled && player != null)
-            AdvancementManager.getInstance().grant(player, "pred");
+            AdvancementManager.grant(player, "pred");
         store("isPred", PersistentDataType.BOOLEAN, enabled);
     }
 
@@ -143,7 +125,7 @@ public class EntityWatcher {
     /// @param enabled      `true` is entity is a prey, otherwise `false`
     public void setPrey(boolean enabled) {
         if (enabled && player != null)
-            AdvancementManager.getInstance().grant(player, "prey");
+            AdvancementManager.grant(player, "prey");
         store("isPrey", PersistentDataType.BOOLEAN, enabled);
     }
 
@@ -184,7 +166,7 @@ public class EntityWatcher {
     ///
     /// @param uuid         Prey's UUID to add
     public void addPrey(UUID uuid) {
-        String stored = retrieve("preys", PersistentDataType.STRING, null);
+        String stored = retrieve("preys", PersistentDataType.STRING);
         if (stored == null)
             stored = uuid.toString();
         else

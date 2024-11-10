@@ -1,16 +1,6 @@
-/* ************************************************************************** */
-/*          .-.                                                               */
-/*    __   /   \   __                                                         */
-/*   (  `'.\   /.'`  )   commands - VoreCommand.java                          */
-/*    '-._.(;;;)._.-'                                                         */
-/*    .-'  ,`"`,  '-.                                                         */
-/*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Saturday, July 1, 2023 11:35 PM        */
-/*      ||  '-'                                                               */
-/* ************************************************************************** */
-
 package dev.blankrose.voretopia.commands;
 
+import dev.blankrose.voretopia.core.VoreActions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,133 +10,141 @@ import org.bukkit.entity.Player;
 import dev.blankrose.voretopia.core.EntityWatcher;
 import dev.blankrose.voretopia.utils.PrefixBuilder;
 
-/**
- * VoreCommand
- * <p>
- * Command class for the /vore command.
- * Provides access to all basic vore-related commands.
- * */
+import javax.swing.*;
+
+/// VoreCommand
+///
+/// Command class for the /vore command.
+/// Provides access to all basic vore-related commands.
 public class VoreCommand implements CommandExecutor {
 
-	// Methods
-	//////////////////////////////
+    // Methods
+    //////////////////////////////
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + label + " can only be executed by a player!");
-			return true;
-		}
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + label + " can only be executed by a player!");
+            return true;
+        }
 
-		if (args.length == 0)
-			return false;
-		Player player = (Player) sender;
+        if (args.length == 0)
+            return false;
+        Player player = (Player) sender;
 
-		switch (args[0].toLowerCase()) {
-			case "help":
-				helpSubCommand(player);
-				break;
+        switch (args[0].toLowerCase()) {
+            case "help":
+                helpSubCommand(player);
+                break;
 
-			case "set":
-				if (!player.hasPermission("voretopia.command.vore.set"))
-					player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
-				else
-					setSubCommand(player, args);
-				break;
+            case "set":
+                if (!player.hasPermission("voretopia.command.vore.set"))
+                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                else
+                    setSubCommand(player, args);
+                break;
 
-			case "setstomach":
-				if (!player.hasPermission("voretopia.command.vore.setstomach"))
-					player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
-				else
-					setStomachSubCommand(player, args);
-				break;
+            case "setstomach":
+                if (!player.hasPermission("voretopia.command.vore.setstomach"))
+                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                else
+                    setStomachSubCommand(player, args);
+                break;
 
-			case "stop":
-				if (!player.hasPermission("voretopia.command.vore.stop"))
-					player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
-				else
-					stopSubCommand(player);
-				break;
+            case "stop":
+                if (!player.hasPermission("voretopia.command.vore.stop"))
+                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                else
+                    stopSubCommand(player);
+                break;
 
-			default:
-				player.sendMessage(ChatColor.RED + "Unknown subcommand!");
-				return false;
-		}
-		return true;
-	}
+            case "release":
+                if (!player.hasPermission("voretopia.command.vore.release"))
+                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                else
+                    VoreActions.release(player);
+                break;
 
-	// Subcommands
-	//////////////////////////////
+            case "escape":
+                if (!player.hasPermission("voretopia.command.vore.escape"))
+                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                else
+                    VoreActions.escape(player);
+                break;
 
-	private void helpSubCommand(Player player) {
-		StringBuilder str = new StringBuilder();
-		str.append(ChatColor.GOLD + "VoreTopia Help\n");
-		str.append(ChatColor.GOLD + "--------------\n");
-		str.append(ChatColor.GOLD + "/vore help - " + ChatColor.WHITE + "Displays this help message.\n");
-		str.append(ChatColor.GOLD + "/vore set <role> [type] - " + ChatColor.WHITE + "Sets your role, along with the vore type.\n");
-		str.append(ChatColor.GOLD + "/vore setstomach <type> - " + ChatColor.WHITE + "Sets your stomachs position.\n");
-		str.append(ChatColor.GOLD + "/vore stop - " + ChatColor.WHITE + "Stops the current vore interactions.\n");
-		player.sendMessage(str.toString());
-	}
+            default:
+                player.sendMessage(ChatColor.RED + "Unknown subcommand!");
+                return false;
+        }
+        return true;
+    }
 
-	private void setSubCommand(Player player, String[] args) {
-		if (args.length == 1) {
-			player.sendMessage(ChatColor.RED + "You must specify a vore type!");
-			return;
-		}
+    // Subcommands
+    //////////////////////////////
 
-		String selection = args[1].toLowerCase();
-		boolean free = selection.startsWith("f") || selection.startsWith("free");
-		EntityWatcher watcher = new EntityWatcher(player);
+    private void helpSubCommand(Player player) {
+        StringBuilder str = new StringBuilder();
+        str.append(ChatColor.GOLD + "VoreTopia Help\n");
+        str.append(ChatColor.GOLD + "--------------\n");
+        str.append(ChatColor.GOLD + "/vore help - " + ChatColor.WHITE + "Displays this help message.\n");
+        str.append(ChatColor.GOLD + "/vore set <role> [type] - " + ChatColor.WHITE + "Sets your role, along with the vore type.\n");
+        str.append(ChatColor.GOLD + "/vore setstomach <type> - " + ChatColor.WHITE + "Sets your stomachs position.\n");
+        str.append(ChatColor.GOLD + "/vore stop - " + ChatColor.WHITE + "Stops the current vore interactions.\n");
+        player.sendMessage(str.toString());
+    }
 
-		if (selection.endsWith("bystander") || selection.endsWith("none")
-			|| selection.endsWith("neutral") || selection.endsWith("off")) {
-			stopSubCommand(player);
-			return;
-		}
+    private void setSubCommand(Player player, String[] args) {
+        if (args.length == 1) {
+            player.sendMessage(ChatColor.RED + "You must specify a vore type!");
+            return;
+        }
 
-		else if (selection.endsWith("pred") || selection.endsWith("predator")) {
-			watcher.setPred(true);
-			watcher.setPrey(false);
-			player.sendMessage(ChatColor.GREEN + "You are now a predator!");
-		}
+        String selection = args[1].toLowerCase();
+        boolean free = selection.startsWith("f") || selection.startsWith("free");
+        EntityWatcher watcher = new EntityWatcher(player);
 
-		else if (selection.endsWith("switch") || selection.endsWith("predprey")
-			|| selection.endsWith("both") || selection.endsWith("all")) {
-			watcher.setPred(true);
-			watcher.setPrey(true);
-			player.sendMessage(ChatColor.GREEN + "You are now a predator and prey!");
-		}
+        if (selection.endsWith("bystander") || selection.endsWith("none")
+                || selection.endsWith("neutral") || selection.endsWith("off")) {
+            stopSubCommand(player);
+            return;
+        }
 
-		else if (selection.endsWith("prey") || selection.endsWith("food")) {
-			watcher.setPred(false);
-			watcher.setPrey(true);
-			player.sendMessage(ChatColor.GREEN + "You are now prey!");
-		}
+        else if (selection.endsWith("pred") || selection.endsWith("predator")) {
+            watcher.setPred(true);
+            watcher.setPrey(false);
+            player.sendMessage(ChatColor.GREEN + "You are now a predator!");
+        }
 
-		else {
-			player.sendMessage(ChatColor.RED + "Invalid vore type!");
-			return;
-		}
+        else if (selection.endsWith("switch") || selection.endsWith("predprey")
+                || selection.endsWith("both") || selection.endsWith("all")) {
+            watcher.setPred(true);
+            watcher.setPrey(true);
+            player.sendMessage(ChatColor.GREEN + "You are now a predator and prey!");
+        }
 
-		watcher.setFree(free);
-		player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
-	}
+        else if (selection.endsWith("prey") || selection.endsWith("food")) {
+            watcher.setPred(false);
+            watcher.setPrey(true);
+            player.sendMessage(ChatColor.GREEN + "You are now prey!");
+        }
 
-	private void setStomachSubCommand(Player player, String[] args) {
-		// TODO: Implement setstomach
-		player.sendMessage(ChatColor.RED + "setStomachSubCommand is not yet implemented!");
-	}
+        else {
+            player.sendMessage(ChatColor.RED + "Invalid vore type!");
+            return;
+        }
 
-	private void stopSubCommand(Player player) {
-		// TODO: Implement releasing process (release prey and get out of preds)
-		EntityWatcher watcher = new EntityWatcher(player);
-		watcher.setPred(false);
-		watcher.setPrey(false);
-		watcher.setFree(false);
+        watcher.setFree(free);
+        player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
+    }
 
-		player.sendMessage(ChatColor.GREEN + "You are no longer a predator or prey!");
-		player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
-	}
+    private void setStomachSubCommand(Player player, String[] args) {
+        // TODO: Implement setstomach
+        player.sendMessage(ChatColor.RED + "setStomachSubCommand is not yet implemented!");
+    }
 
+    private void stopSubCommand(Player player) {
+        VoreActions.halt(player);
+        player.sendMessage(ChatColor.GREEN + "You are no longer a predator or prey!");
+        player.setPlayerListName(PrefixBuilder.getEntityPrefix(player));
+    }
 }

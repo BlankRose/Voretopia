@@ -45,6 +45,10 @@ public class VoreCompletion implements TabCompleter {
 					add("setstomach");
 				if (sender.hasPermission("voretopia.command.vore.stop"))
 					add("stop");
+				if (sender.hasPermission("voretopia.command.vore.release"))
+					add("release");
+				if (sender.hasPermission("voretopia.command.vore.escape"))
+					add("escape");
 			}};
 
 		// Set subcommand
@@ -60,7 +64,7 @@ public class VoreCompletion implements TabCompleter {
 		}
 
 		// Returns empty list when none exists for given context
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 }

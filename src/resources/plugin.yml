@@ -95,6 +95,8 @@ permissions:
       voretopia.command.vore.set: true
       voretopia.command.vore.setstomach: true
       voretopia.command.vore.stop: true
+      voretopia.command.vore.release: true
+      voretopia.command.vore.escape: true
 
   voretopia.command.vore.set:
     description: Allows to set the role of a player
@@ -106,6 +108,14 @@ permissions:
 
   voretopia.command.vore.stop:
     description: Allows to stop a player from being vored
+    default: true
+
+  voretopia.command.vore.release:
+    description: Allows the player to release its prey
+    default: true
+
+  voretopia.command.vore.escape:
+    description: Allows the player to escape its pred
     default: true
 
   voretopia.command.list:

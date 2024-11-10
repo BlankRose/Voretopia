@@ -1,21 +1,8 @@
-/* ************************************************************************** */
-/*          .-.                                                               */
-/*    __   /   \   __                                                         */
-/*   (  `'.\   /.'`  )   core - CommandsManager.java                          */
-/*    '-._.(;;;)._.-'                                                         */
-/*    .-'  ,`"`,  '-.                                                         */
-/*   (__.-'/   \'-.__)   By: Rosie (https://github.com/BlankRose)             */
-/*       //\   /         Last Updated: Saturday, July 1, 2023 9:08 PM         */
-/*      ||  '-'                                                               */
-/* ************************************************************************** */
-
 package dev.blankrose.voretopia.core;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.blankrose.voretopia.commands.CancelCompletion;
 import dev.blankrose.voretopia.commands.ConfigCheckerCommand;
@@ -24,67 +11,56 @@ import dev.blankrose.voretopia.commands.ReloadCommand;
 import dev.blankrose.voretopia.commands.VoreCommand;
 import dev.blankrose.voretopia.commands.VoreCompletion;
 
-/**
- * << Singleton >>
- * CommandsManager
- * <p>
- * Registers and handles commands of the plugin.
- * */
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/// << Static >>
+/// CommandsManager
+///
+/// Registers and handles commands of the plugin.
 public class CommandsManager {
+    private CommandsManager() {}
 
-	// Attributes
-	//////////////////////////////
+    /// Registers a single command for the plugin.
+    ///
+    /// @param name             Name of the command to register
+    /// @param exec             What to execute upon call
+    /// @param completer        How to complete upon typing
+    ///
+    /// @implNote               If command is not registered within `plugin.yml`, it will be ignored
+    private static void registerSingle(@Nonnull String name, @Nonnull CommandExecutor exec, @Nonnull TabCompleter completer) {
+        PluginCommand cmd = getCommand(name);
+        if (cmd == null)
+            return;
+        cmd.setExecutor(exec);
+        cmd.setTabCompleter(completer);
+    }
 
-	private JavaPlugin core;
+    /// Registers all commands of the plugin.
+    public static void registerCommands() {
+        registerSingle("vore-reload",
+                new ReloadCommand(),
+                new CancelCompletion());
+        registerSingle("vore",
+                new VoreCommand(),
+                new VoreCompletion());
+        registerSingle("vore-list",
+                new ListCommand(),
+                new CancelCompletion());
+        registerSingle("config-checker",
+                new ConfigCheckerCommand(),
+                new CancelCompletion());
 
-	// Constructors
-	//////////////////////////////
+        Provider.getLogger().info("All commands has been successfully registered!");
+    }
 
-	private static CommandsManager instance;
-	private CommandsManager() {}
-
-	public static CommandsManager getInstance() {
-		if (instance == null)
-			instance = new CommandsManager();
-		return instance;
-	}
-
-	// Methods
-	//////////////////////////////
-
-	private void registerSingle(String name, CommandExecutor exec, TabCompleter completer) {
-		PluginCommand cmd = core.getCommand(name);
-		cmd.setExecutor(exec);
-		cmd.setTabCompleter(completer);
-	}
-
-	/**
-	 * Registers all commands of the plugin.
-	 * */
-	public void registerCommands(JavaPlugin core) {
-		if (this.core != null)
-			throw new IllegalStateException("Commands has already been initialized!");
-		this.core = core;
-
-		// Register commands
-		registerSingle("vore-reload",
-			new ReloadCommand(),
-			new CancelCompletion());
-		registerSingle("vore",
-			new VoreCommand(),
-			new VoreCompletion());
-		registerSingle("vore-list",
-			new ListCommand(),
-			new CancelCompletion());
-		registerSingle("config-checker",
-			new ConfigCheckerCommand(),
-			new CancelCompletion());
-
-		core.getLogger().info("All commands has been successfully registered!");
-	}
-
-	public Command getCommand(String name) {
-		return core.getCommand(name);
-	}
-
+    /// Retrieves a command from this plugin
+    ///
+    /// @param name             Name of the command
+    /// @return                 The command, otherwise `null` if it wasn't found
+    ///                         (likely it wasn't saved in the `plugin.yml` file)
+    @Nullable
+    public static PluginCommand getCommand(String name) {
+        return Provider.getPlugin().getCommand(name);
+    }
 }
